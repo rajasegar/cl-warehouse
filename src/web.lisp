@@ -63,6 +63,11 @@
 ;; (mito:insert-dao (make-instance 'boxes :contents "Scissors" :value 90 :warehouse-id 3))
 ;; (mito:insert-dao (make-instance 'boxes :contents "Rocks" :value 180 :warehouse-id 4))
 ;; (mito:insert-dao (make-instance 'boxes :contents "Paper" :value 250 :warehouse-id 5))
+
+;; utils
+(defun get-param (name parsed)
+  "Get param values from _parsed"
+  (cdr (assoc name parsed :test #'string=)))
 ;;
 ;; Routing rules
 
@@ -70,10 +75,33 @@
   (render #P"index.html"))
 
 (defroute "/warehouses" ()
-  (render #P"warehouses.html" (list :warehouses (mito:retrieve-dao 'warehouses))))
+  (render #P"warehouses/index.html" (list :warehouses (mito:retrieve-dao 'warehouses))))
+
+(defroute ("/warehouses" :method :POST) (&key _parsed)
+  (print _parsed)
+  (let ((new-warehouse (make-instance 'warehouses
+                                      :location (get-param "location" _parsed)
+                                      :capacity (get-param "capacity" _parsed))))
+    (mito:insert-dao new-warehouse)
+    (redirect "/warehouses")))
+
+(defroute "/warehouses/new" ()
+  (render #P"warehouses/new.html"))
+
+(defroute "/warehouses/:id/edit" (&key id)
+  (let ((warehouse (mito:find-dao 'warehouses :id id)))
+  (render #P"warehouses/edit.html" (list :warehouse warehouse))))
+
+(defroute ("/warehouses/:id/update" :method :POST) (&key id _parsed)
+  (let ((warehouse (mito:find-dao 'warehouses :id id)))
+    (setf (slot-value warehouse 'location) (get-param "location" _parsed)
+          (slot-value warehouse 'capacity) (get-param "capacity" _parsed))
+    (mito:save-dao warehouse)
+    (redirect "/warehouses")))
 
 (defroute "/boxes" ()
-  (render #P"boxes.html" (list :boxes (mito:retrieve-dao 'boxes))))
+  (render #P"boxes/index.html" (list :boxes (mito:retrieve-dao 'boxes))))
+
 ;;
 ;; Error pages
 

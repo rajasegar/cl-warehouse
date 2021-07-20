@@ -1,0 +1,18 @@
+{% extends "layouts/default.html" %}
+{% block title %}Edit {{warehouse.name}} - The Warehouse{% endblock %}
+{% block content %}
+<div class="container py-2">
+<h1 class="display-6 fw-bold">Edit Warehouse</h1>
+<form action="/warehouses/{{warehouse.id}}/update" method="POST">
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Location</label>
+    <input class="form-control" name="location" type="text" value="{{warehouse.location}}"/>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Capacity</label>
+    <input class="form-control" name="capacity" type="text" value="{{warehouse.capacity}}"/>
+  </div>
+  <button class="btn btn-primary">Update</button>
+  </form>
+</div>
+{% endblock %}

@@ -2,12 +2,15 @@
 {% block title %}Warehouses - The Warehouse{% endblock %}
 {% block content %}
 <div class="container py-2">
-<h1 class="display-5 fw-bold">Warehouses</h1>
+<h1 class="display-6 fw-bold">Warehouses</h1>
+<a href="/warehouses/new" class="btn btn-primary">New Warehouse</a>
 <table class="table table-striped">
   <thead>
     <tr>
       <th>Location</th>
       <th>Capacity</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -15,6 +18,12 @@
     <tr>
       <td>{{warehouse.location}}</td>
       <td>{{warehouse.capacity}}</td>
+      <td><a class="btn btn-primary btn-sm" href="/warehouses/{{warehouse.id}}/edit">
+          {% include "svgs/pencil-square.html" %}
+      </a></td>
+      <td><a class="btn btn-danger btn-sm" href="/warehouses/{{warehouse.id}}/delete">
+          {% include "svgs/trash.html" %}
+          </a></td>
     </tr>
     {% endfor %}
   </tbody>
