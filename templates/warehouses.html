@@ -1,0 +1,23 @@
+{% extends "layouts/default.html" %}
+{% block title %}Warehouses - The Warehouse{% endblock %}
+{% block content %}
+<div class="container py-2">
+<h1 class="display-5 fw-bold">Warehouses</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Location</th>
+      <th>Capacity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for warehouse in warehouses %}
+    <tr>
+      <td>{{warehouse.location}}</td>
+      <td>{{warehouse.capacity}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
