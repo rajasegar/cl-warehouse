@@ -1,0 +1,9 @@
+{% ifequal sort-by column %}
+    {% ifequal direction "asc" %}
+        <a href="{{url}}?direction=desc&sort-by={{column}}">&darr; {{title}} </a>
+    {% else %}
+        <a href="{{url}}?direction=asc&sort-by={{column}}">&uarr; {{title}} </a>
+    {% endifequal %}
+{% else %}
+    <a href="{{url}}?direction=asc&sort-by={{column}}">{{title}} </a>
+{% endifequal %}

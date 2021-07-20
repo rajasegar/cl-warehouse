@@ -1,0 +1,27 @@
+{% extends "layouts/default.html" %}
+{% block title %}New Box - The Warehouse{% endblock %}
+{% block content %}
+<div class="container py-2">
+<h1 class="display-6 fw-bold">New Box</h1>
+<form action="/boxes" method="POST">
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Contents:</label>
+    <input class="form-control" name="contents" type="text" value=""/>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Value:</label>
+    <input class="form-control" name="value" type="number" value=""/>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="">Warehouse: </label>
+    <select class="form-select" id="" name="warehouse">
+     {% for w in warehouses %} 
+     <option value={{w.id}}>{{w.location}}</option>
+     {% endfor %}
+    </select>
+  </div>
+  <button class="btn btn-primary">Create New Box</button>
+  <a href="/boxes" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

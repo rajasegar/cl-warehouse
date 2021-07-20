@@ -2,12 +2,19 @@
 {% block title %}Boxes - The Warehouse{% endblock %}
 {% block content %}
 <div class="container py-2">
-<h1 class="display-5 fw-bold">Boxes</h1>
+  <div class="row">
+    <div class="col-10">
+    <h1>Boxes</h1>
+    </div>
+    <div class="col-2">
+      <a class="btn btn-primary" href="/boxes/new">New Box</a>
+    </div>
+  </div>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Contents</th>
-      <th>Value</th>
+      <th>{% include "_table-header.html" :url "/boxes" :column "contents" :title "Contents" %}</th>
+      <th>{% include "_table-header.html" :url "/boxes" :column "value" :title "Value" %}</th>
       <th>Warehouse</th>
     </tr>
   </thead>

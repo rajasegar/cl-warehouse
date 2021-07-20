@@ -4,7 +4,7 @@
 <div class="container py-2">
   <div class="row">
     <div class="col-9">
-      <h1 class="display-6 fw-bold">Warehouses</h1>
+      <h1>Warehouses</h1>
     </div>
     <div class="col-3">
       <a href="/warehouses/new" class="btn btn-primary">New Warehouse</a>
@@ -13,8 +13,12 @@
   <table class="table table-striped">
     <thead>
       <tr>
-	<th>Location</th>
-	<th>Capacity</th>
+	      <th>
+          {% include "_table-header.html" :column "location" :title "Location" %}
+        </th>
+	      <th>
+          {% include "_table-header.html" :column "capacity" :title "Capacity" %}
+        </th>
 	<th>Edit</th>
 	<th>Delete</th>
       </tr>
