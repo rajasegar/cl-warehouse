@@ -16,7 +16,7 @@
     <tr>
       <td>{{box.contents}}</td>
       <td>{{box.value}}</td>
-      <td>{{box.warehouse-id}}</td>
+      <td><a href="/warehouses/{{box.warehouse-id}}">{{box.warehouse.location}}</a></td>
     </tr>
     {% endfor %}
   </tbody>

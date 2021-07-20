@@ -1,0 +1,25 @@
+{% extends "layouts/default.html" %}
+{% block title %}{{warehouse.name}} - The Warehouse{% endblock %}
+{% block content %}
+<div class="container py-2">
+  <div class="row">
+    <div class="col-10">
+<h1 class="display-6 fw-bold">Warehouse</h1>
+    </div>
+    <div class="col-2">
+      
+	<a class="btn btn-primary" href="/warehouses/{{warehouse.id}}/edit">Edit
+	</a>
+	<a class="btn btn-danger" href="/warehouses/{{warehouse.id}}/delete">Delete</a>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Location</label>
+    {{warehouse.location}}
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Capacity</label>
+    {{warehouse.capacity}}
+  </div>
+</div>
+{% endblock %}

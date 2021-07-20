@@ -23,10 +23,6 @@
 ;; Db connection
 (mito:connect-toplevel :sqlite3 :database-name (merge-pathnames #P"warehouse.db" *application-root*))
 
-;; (mito:deftable user ()
-;;   ((name :col-type (:varchar 64))
-;;    (email :col-type (or (:varchar 128) :null))))
-
 (mito:deftable warehouses ()
   ((location :col-type (:varchar 50))
    (capacity :col-type (:integer))))
@@ -36,15 +32,8 @@
    (value :col-type (:integer))
    (warehouse :col-type warehouses :references warehouses)))
 
-;; (mito:ensure-table-exists 'user)
 (mito:ensure-table-exists 'warehouses)
 (mito:ensure-table-exists 'boxes)
-
-
-;; (defvar me
-;;   (make-instance 'user :name "Eitaro Fukamachi" :email "e.arrows@gmail.com"))
-
-;; (mito:insert-dao me)
 
 ;; (mito:insert-dao (make-instance 'warehouses :location "Chicago" :capacity 3))
 ;; (mito:insert-dao (make-instance 'warehouses :location "Chicago" :capacity 4))
@@ -72,10 +61,11 @@
 ;; Routing rules
 
 (defroute "/" ()
-  (render #P"index.html"))
+  (render #P"index.html" (list :active "/")))
 
 (defroute "/warehouses" ()
-  (render #P"warehouses/index.html" (list :warehouses (mito:retrieve-dao 'warehouses))))
+  (render #P"warehouses/index.html" (list :warehouses (mito:retrieve-dao 'warehouses)
+					  :active "/warehouses")))
 
 (defroute ("/warehouses" :method :POST) (&key _parsed)
   (print _parsed)
@@ -99,8 +89,19 @@
     (mito:save-dao warehouse)
     (redirect "/warehouses")))
 
+(defroute "/warehouses/:id/delete" (&key id)
+  (mito:delete-by-values 'warehouses :id id)
+  (redirect "/warehouses"))
+
+(defroute "/warehouses/:id" (&key id)
+  (let ((warehouse (mito:find-dao 'warehouses :id id)))
+  (render #P"warehouses/show.html" (list :warehouse warehouse))))
+
 (defroute "/boxes" ()
-  (render #P"boxes/index.html" (list :boxes (mito:retrieve-dao 'boxes))))
+  (render #P"boxes/index.html" (list
+				:boxes (mito:select-dao 'boxes (mito:includes 'warehouses))
+
+				:active "/boxes")))
 
 ;;
 ;; Error pages
