@@ -1,3 +1,4 @@
+(push #p"/app/" asdf:*central-registry*)
 (ql:quickload :cl-warehouse)
 
 (defpackage cl-warehouse.app

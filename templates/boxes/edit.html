@@ -1,0 +1,27 @@
+{% extends "layouts/default.html" %}
+{% block title %}Edit Box - The Warehouse{% endblock %}
+{% block content %}
+<div class="container py-2">
+<h1 class="display-6 fw-bold">Edit Box</h1>
+<form action="/boxes/{{box.id}}/update" method="POST">
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Contents:</label>
+    <input class="form-control" name="contents" type="text" value="{{box.contents}}"/>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="txtLocation">Value:</label>
+    <input class="form-control" name="value" type="number" value="{{box.value}}"/>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="">Warehouse: </label>
+    <select class="form-select" id="" name="warehouse">
+     {% for w in warehouses %} 
+     <option value={{w.id}} {% ifequal box.warehouse-id w.id %}selected="true"{% endifequal %}>{{w.location}}</option>
+     {% endfor %}
+    </select>
+  </div>
+  <button class="btn btn-primary">Update Box</button>
+  <a href="/boxes" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

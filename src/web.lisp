@@ -20,6 +20,7 @@
 (defvar *web* (make-instance '<web>))
 (clear-routing-rules *web*)
 
+(defvar *alerts* '())
 ;; Db connection
 (mito:connect-toplevel :sqlite3 :database-name (merge-pathnames #P"warehouse.db" *application-root*))
 
@@ -82,14 +83,18 @@
 (defroute "/warehouses" (&key _parsed)
   (let* ((direction (or (get-param "direction" _parsed) "asc"))
         (sort-by (or (get-param "sort-by" _parsed) "location"))
-         (warehouses (mito:select-dao 'warehouses
-                       (sxql:order-by (get-order-by direction sort-by)))))
+        (warehouses (mito:select-dao 'warehouses
+                      (sxql:order-by (get-order-by direction sort-by))))
+         (alerts *alerts*))
+    ;; Clear all the alerts
+    (setf *alerts* nil)
     (render #P"warehouses/index.html"
             (list
              :warehouses warehouses
              :active "/warehouses"
              :direction direction
-             :sort-by sort-by))))
+             :sort-by sort-by
+             :alerts alerts))))
 
 ;; POST /warehouses
 ;; Create a new warehouse
@@ -99,6 +104,7 @@
                                       :location (get-param "location" _parsed)
                                       :capacity (get-param "capacity" _parsed))))
     (mito:insert-dao new-warehouse)
+    (push (list :type "bg-primary" :title "New Warehouse created.") *alerts*)
     (redirect "/warehouses")))
 
 ;; GET /warehouses/new
@@ -119,12 +125,14 @@
     (setf (slot-value warehouse 'location) (get-param "location" _parsed)
           (slot-value warehouse 'capacity) (get-param "capacity" _parsed))
     (mito:save-dao warehouse)
+    (push (list :title "Warehouse info updated successfully.") *alerts*)
     (redirect "/warehouses")))
 
 ;; GET /warehouses/:id/delete
 ;; Delete warehouse
 (defroute "/warehouses/:id/delete" (&key id)
   (mito:delete-by-values 'warehouses :id id)
+  (push (list :type "bg-danger" :title "Warehouse deleted.") *alerts*)
   (redirect "/warehouses"))
 
 ;; GET /warehouses/:id
@@ -139,12 +147,15 @@
   (let* ((direction (or (get-param "direction" _parsed) "asc"))
          (sort-by (or (get-param "sort-by" _parsed) "contents"))
          (boxes (mito:select-dao 'boxes (mito:includes 'warehouses)
-                  (sxql:order-by (get-order-by direction sort-by)))))
+                  (sxql:order-by (get-order-by direction sort-by))))
+         (alerts *alerts*))
+    (setf *alerts* nil)
   (render #P"boxes/index.html" (list
 				:boxes boxes
 				:active "/boxes"
         :direction direction
-        :sort-by sort-by))))
+        :sort-by sort-by
+        :alerts alerts))))
 
 ;; GET /boxes/new
 ;; New box page
@@ -159,7 +170,35 @@
                                       :value (get-param "value" _parsed)
                                       :warehouse (mito:find-dao 'warehouses :id (get-param "warehouse" _parsed)))))
     (mito:insert-dao new-box)
+    (push (list :title "New Box created.") *alerts*)
     (redirect "/boxes")))
+
+;; GET /boxes/:id/edit
+;; Edit box
+(defroute "/boxes/:id/edit" (&key id)
+  (let ((box (mito:find-dao 'boxes :id id)))
+    (render #P"boxes/edit.html" (list :box box
+                                      :warehouses (mito:select-dao 'warehouses)))))
+
+;; POST /boxes/:id/update
+;; Update box
+(defroute ("/boxes/:id/update" :method :POST) (&key id _parsed)
+  (let ((box (mito:find-dao 'boxes :id id)))
+    (setf (slot-value box 'contents) (get-param "contents" _parsed)
+          (slot-value box 'value) (get-param "value" _parsed)
+          (slot-value box 'warehouse) (mito:find-dao 'warehouses :id (get-param "warehouse" _parsed)))
+    (mito:save-dao box)
+    (push (list :title "Box info updated successfully.") *alerts*)
+    (redirect "/boxes")))
+
+;; GET /boxes/:id/delete
+;; Delete warehouse
+(defroute "/boxes/:id/delete" (&key id)
+  (mito:delete-by-values 'boxes :id id)
+  (push (list :title "Box deleted successfully.") *alerts*)
+  (redirect "/boxes"))
+
+
 ;;
 ;; Error pages
 

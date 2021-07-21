@@ -16,6 +16,8 @@
       <th>{% include "_table-header.html" :url "/boxes" :column "contents" :title "Contents" %}</th>
       <th>{% include "_table-header.html" :url "/boxes" :column "value" :title "Value" %}</th>
       <th>Warehouse</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +26,8 @@
       <td>{{box.contents}}</td>
       <td>{{box.value}}</td>
       <td><a href="/warehouses/{{box.warehouse-id}}">{{box.warehouse.location}}</a></td>
+      <td><a class="btn btn-primary btn-sm" href="/boxes/{{box.id}}/edit">{% include "svgs/pencil-square.html" %}</a></td>
+      <td><a class="btn btn-danger btn-sm" href="/boxes/{{box.id}}/delete">{% include "svgs/trash.html" %}</a></td>
     </tr>
     {% endfor %}
   </tbody>
