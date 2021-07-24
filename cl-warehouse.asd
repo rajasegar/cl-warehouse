@@ -6,17 +6,17 @@
                "lack"
                "caveman2"
                "envy"
-               "cl-ppcre"
+               ;; "cl-ppcre"
                "uiop"
 
                ;; for @route annotation
-               "cl-syntax-annot"
+               ;; "cl-syntax-annot"
 
                ;; HTML Template
                "djula"
 
                ;; for DB
-               "datafly"
+               ;; "datafly"
                "sxql"
 	       "mito")
   :components ((:module "src"

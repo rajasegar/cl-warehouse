@@ -5,7 +5,7 @@
         :cl-warehouse.config
         :cl-warehouse.view
         :cl-warehouse.db
-        :datafly
+        ;; :datafly
         :sxql)
   (:export :*web*))
 (in-package :cl-warehouse.web)
