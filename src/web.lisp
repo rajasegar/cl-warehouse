@@ -138,8 +138,10 @@
 ;; GET /warehouses/:id
 ;; Warehouse detail page
 (defroute "/warehouses/:id" (&key id)
-  (let ((warehouse (mito:find-dao 'warehouses :id id)))
-  (render #P"warehouses/show.html" (list :warehouse warehouse))))
+  (let ((warehouse (mito:find-dao 'warehouses :id id))
+	(boxes (mito:select-dao 'boxes (sxql:where (:= :warehouse-id (parse-integer id))))))
+    (render #P"warehouses/show.html" (list :warehouse warehouse
+					   :boxes boxes))))
 
 ;; GET /boxes
 ;; Boxes list page
