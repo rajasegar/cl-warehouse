@@ -1,6 +1,7 @@
 # cl-warehouse
 A small Warehouse management application in Common Lisp using [Caveman](https://github.com/fukamachi/caveman) and [Mito](https://github.com/fukamachi/mito).
 
+![cl-warehouse-demo.gif](cl-warehouse-demo.gif)
 
 ## Usage
 ```lisp
